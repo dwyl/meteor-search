@@ -1,0 +1,19 @@
+<head>
+  <title>raok</title>
+   <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.2/leaflet.css" />
+   <script src="http://cdn.leafletjs.com/leaflet-0.7.2/leaflet.js"></script>
+   <script type="text/javascript" src="//platform.twitter.com/widgets.js"></script>
+</head>
+
+<body>
+  {{> hello}}
+  {{> map }}
+</body>
+
+<template name="hello">
+  <h1>{{ greeting }}</h1>
+</template>
+
+<template name="map">
+  <div id="map"></div>
+</template>
