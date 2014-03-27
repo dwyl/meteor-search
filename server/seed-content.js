@@ -1,4 +1,5 @@
-var KEYWORDS = "learn"; // add keywords separated by spaces.
+var KEYWORDS = "learn, learned, learnt, homework, science, math, maths, physics, chemistry"; // add keywords separated by spaces.
+var POST_COUNT = 10000;
 
 /*************************************/
 // Posts = new Meteor.Collection("posts");
@@ -30,16 +31,22 @@ Meteor.startup(function () {
   		    var tweet = {};
 	    		tweet.text = data.text;
           tweet.time = new Date(Date.parse(data.created_at));
-          tweet.avatar = data.user.profile_image_url;
+          tweet.avatar = data.user && data.user.profile_image_url || '';
 
-          if(data.entities.media){
-            console.log(data.entities.media[0].media_url);    
+          if(data.entities && data.entities.media && data.entities.media[0].media_url){ // extract images where available:
+            // console.log(data.entities.media[0].media_url);    
             tweet.img = data.entities.media[0].media_url;
+           
+          }
+          if(data.retweeted_status && parseInt(data.retweeted_status.retweet_count, 10) > 0){
+          	// console.log(data)
+          }
+          // console.log(data.lang)
+          if(data.lang === 'en' && tweet.img) {
+            insertTweet(tweet);        	
           }
 
-          insertTweet(tweet);
-
-        	// console.log(data); // full tweet
+        	// console.log(data.retweeted_status); // full tweet
 		    });
 		});
 	}

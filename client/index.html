@@ -9,11 +9,19 @@
 <template name="posts">
 
 	{{#each entries}}
-		<p>{{text}}</p>
-    {{#if img}}
-      <img src="{{img}}">
-    {{/if}}
+    {{>post}}
 	{{/each}}
+</template>
+
+<template name="post">
+  <div class='post'>
+    <img class='avatar' src="{{avatarsrc}}">
+    <span "text">{{text}}</span>
+
+    {{#if img}}
+      <img class="img" src="{{img}}">
+    {{/if}}
+  </div>
 </template>
 
 <template name="loading">

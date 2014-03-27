@@ -1,0 +1,44 @@
+.navbar{
+	background-color: #5cb85c;
+	border-radius: 0px !important;
+	height: 30px;
+}
+.brand {
+	color: white;
+}
+
+.post {
+	width: 100%;
+	clear:both;
+	display: inline-block;
+	margin-bottom: 20px;
+  background: #fff;
+  padding-left: 0.5em;
+  padding-bottom: 0.5em;
+  margin-bottom: 1em;
+  -webkit-border-bottom-right-radius: 3px;
+  -webkit-border-bottom-left-radius: 3px;
+  -moz-border-radius-bottomright: 3px;
+  -moz-border-radius-bottomleft: 3px;
+  border-bottom-right-radius: 3px;
+  border-bottom-left-radius: 3px;
+  -webkit-box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.18);
+  -moz-box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.18);
+  box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.18);
+}
+
+.text {
+	float: left;
+	margin-left: 20px;
+}
+
+.avatar {
+	border-radius: 50%;
+	float: left;
+}
+
+.img {
+	border-radius: 10px;
+	margin-right: 1em;
+	width: 100%; 
+}

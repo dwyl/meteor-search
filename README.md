@@ -19,7 +19,7 @@ thousands of tweets for you to search through (*locally*).
 (leave it running for a few minutes and you will get 10k posts. 
 Or a few hours if you want hundreds of thousands to stress test search)
 
-
+If you want ***LOTS*** of content very quickly, change the KEYWORD to **news**.
 
 
 ### Iron Router

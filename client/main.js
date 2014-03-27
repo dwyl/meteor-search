@@ -5,3 +5,9 @@ Template.posts.entries = function(){
 	console.log('hai!')
 	return entries;
 };
+
+Template.post.helpers({
+	avatarsrc: function() {
+		return this.avatar || 'http://www.fashionally.com/images/default_profile_pic.jpg'
+	}
+})
