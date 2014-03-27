@@ -45,7 +45,9 @@ Meteor.startup(function () {
           }
           // console.log(data.lang)
           // if(data.lang === 'en') { // && tweet.img) {
-            insertTweet(tweet);        	
+		    	if(tweet.text.indexOf("#") !== -1) {   
+            insertTweet(tweet);        
+          }	
           // }
 
         	// console.log(data.retweeted_status); // full tweet

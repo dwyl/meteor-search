@@ -14,7 +14,7 @@ Router.map(function () {
   });
 
   this.route('postPage', { 
-  	path: '/posts/:_id'
+  	path: '/find/:keyword'
   });
 
 });

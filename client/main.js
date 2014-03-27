@@ -2,44 +2,50 @@
 
 Template.posts.entries = function(){
 	var entries = Posts.find();
-	console.log('hai!')
+	// console.log('hai!')
 	return entries;
 };
 
 Template.post.helpers({
 	avatarsrc: function() {
-		return this.avatar || 'http://www.fashionally.com/images/default_profile_pic.jpg'
+		return this.avatar || 'http://www.fashionally.com/images/default_profile_pic.jpg';
+	},
+	highlightText: function() {
+		return highlight(this.text);
 	}
 })
 
 // highlight all links and make them clickable with target="_blank"
 
 // highlight #hashtagged strings and make them clickable
+function highlight(text) {
+	var hashtagPattern = /\s*(#\w*)/gi, 
+	link = "find/", 
+	m, match, matches = [], t, url ='';
 
-function highlightHashtags() {
-  var elems = document.getElementsByClassName('show'),
-  match, m, pattern = /\s*(#\w*)/gi, text, t;
-
-  for(var i=0; i < elems.length; i++){
-    var matches = [];
-    text = elems[i].textContent; // get the original text
-
-    if(text.indexOf("#") !== -1) {   
+	// initial check for hashtag in text
+	if(text.indexOf("#") !== -1) {   
 
       // in many cases there will be more than one hashtagged word in a block of text 
-      while ( (match = pattern.exec(text)) ) {
+      while ( (match = hashtagPattern.exec(text)) ) {
         matches.push(match[0]);
       }
 
       // loop throught all the matches identified above and replace them with a bold colored text
       for(var j=0; j < matches.length; j++) {
-        m = matches[j];
-        t = "<b class='hashtag'>"+m+"</b>";
+        m = matches[j].replace(/\s/g, "");
+        // console.log('match',m);
+        url = link+m;
+        url = url.replace('#',"").toLowerCase();
+        t = " <a class='hashtag' href='"+url+"'>"+m+"</a> "; // replace with
         replace = new RegExp("\\s*("+m+")", 'gi');
-        // console.log(replace)
+
         text = text.replace(replace, t);
       }
-      elems[i].innerHTML = text;
     }
-  }
+    return text;
 }
+
+// var post = "RT @BestProAdvice: Great idea http://t.co/KYZVyKWOdO #GreatIdea #this";
+// console.log(highlight(post));
+

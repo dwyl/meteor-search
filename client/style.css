@@ -2,13 +2,19 @@ body{
 	background-color: #ecf0f1 !important;
 }
 
-.navbar{
+.navbar {
 	background-color: #5cb85c;
 	border-radius: 0px !important;
-	height: 30px;
+	max-height: 30px !important;
+	min-height: 30px !important;
 }
 .brand {
 	color: white;
+	font-size: 1.5em;
+}
+.brand:hover {
+	color: white;
+	text-decoration: none;
 }
 
 .post {
@@ -20,7 +26,7 @@ body{
   padding:1em;
   margin-bottom: 1em;
   border-radius: 5px;
-  box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.18);
+  box-shadow: 0 3px 3px 0 rgba(0, 0, 0, 0.18);
 }
 
 .text {
@@ -38,4 +44,5 @@ body{
 	border-radius: 10px;
 	margin-right: 1em;
 	width: 100%; 
+	margin-top: 1em;
 }
