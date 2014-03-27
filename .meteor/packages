@@ -7,3 +7,5 @@ standard-app-packages
 insecure
 preserve-inputs
 npm
+iron-router
+spin

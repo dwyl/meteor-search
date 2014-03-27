@@ -1,20 +1,7 @@
-Deps.autorun(function() {
-  Meteor.subscribe("actsUpdated", Session.get("bounds"));
-});
+// Posts = new Meteor.Collection('posts');
 
-var map = Map();
-
-Acts.find().observe({
-  added: map.addPin,
-  removed: map.removePin,
-  changed: map.updatePin
-});
-
-Template.hello.greeting = function () {
-  return "Welcome to raok.";
+Template.posts.entries = function(){
+	var entries = Posts.find();
+	console.log('hai!')
+	return entries;
 };
-
-Template.map.rendered = function() {
-  map.init();
-};
-
