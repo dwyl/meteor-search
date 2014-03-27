@@ -1,3 +1,7 @@
+body{
+	background-color: #ecf0f1 !important;
+}
+
 .navbar{
 	background-color: #5cb85c;
 	border-radius: 0px !important;
@@ -13,17 +17,9 @@
 	display: inline-block;
 	margin-bottom: 20px;
   background: #fff;
-  padding-left: 0.5em;
-  padding-bottom: 0.5em;
+  padding:1em;
   margin-bottom: 1em;
-  -webkit-border-bottom-right-radius: 3px;
-  -webkit-border-bottom-left-radius: 3px;
-  -moz-border-radius-bottomright: 3px;
-  -moz-border-radius-bottomleft: 3px;
-  border-bottom-right-radius: 3px;
-  border-bottom-left-radius: 3px;
-  -webkit-box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.18);
-  -moz-box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.18);
+  border-radius: 5px;
   box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.18);
 }
 
@@ -35,6 +31,7 @@
 .avatar {
 	border-radius: 50%;
 	float: left;
+	margin-right: 1em;
 }
 
 .img {

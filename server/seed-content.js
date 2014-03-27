@@ -1,4 +1,6 @@
 var KEYWORDS = "learn, learned, learnt, homework, science, math, maths, physics, chemistry"; // add keywords separated by spaces.
+KEYWORDS = "great idea";
+// KEYWORDS = "katie, justin, kim, beyonce, 1DWorld, OMG, FML, news, breaking";
 var POST_COUNT = 10000;
 
 /*************************************/
@@ -42,9 +44,9 @@ Meteor.startup(function () {
           	// console.log(data)
           }
           // console.log(data.lang)
-          if(data.lang === 'en' && tweet.img) {
+          // if(data.lang === 'en') { // && tweet.img) {
             insertTweet(tweet);        	
-          }
+          // }
 
         	// console.log(data.retweeted_status); // full tweet
 		    });

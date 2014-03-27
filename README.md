@@ -6,7 +6,8 @@ People want to find stuff.
 
 ## What
 
-Full-text search 
+Full-text search.
+
 
 ## How
 
@@ -20,6 +21,17 @@ thousands of tweets for you to search through (*locally*).
 Or a few hours if you want hundreds of thousands to stress test search)
 
 If you want ***LOTS*** of content very quickly, change the KEYWORD to **news**.
+
+If you want ***INSANE*** amounts of (*noisy*) data 
+(to symulate *volume*), use:
+```
+var KEYWORDS = "katie, justin, kim, beyonce, miley, Obama, 1DWorld, OMG, FML, breaking, news";
+```
+
+### Step 2 - Highlighting Hashtags
+
+
+
 
 
 ### Iron Router
