@@ -15,8 +15,6 @@ Template.post.helpers({
 	}
 })
 
-// highlight all links and make them clickable with target="_blank"
-
 // highlight #hashtagged strings and make them clickable
 function highlight(text) {
 	var hashtagPattern = /\s*(#\w*)/gi, 
@@ -36,7 +34,7 @@ function highlight(text) {
         m = matches[j].replace(/\s/g, "");
         // console.log('match',m);
         url = link+m;
-        url = url.replace('#',"").toLowerCase();
+        url = url.replace('#',"").toLowerCase(); // remove hashtag for lookup
         t = " <a class='hashtag' href='"+url+"'>"+m+"</a> "; // replace with
         replace = new RegExp("\\s*("+m+")", 'gi');
 
@@ -49,3 +47,11 @@ function highlight(text) {
 // var post = "RT @BestProAdvice: Great idea http://t.co/KYZVyKWOdO #GreatIdea #this";
 // console.log(highlight(post));
 
+// >> later:
+// highlight all links and make them clickable with target="_blank"
+
+Template.results.entries = function(){
+	var entries = Posts.runCommand( "text", { search: "paypal" } );
+	console.log('hai!')
+	return entries;
+};

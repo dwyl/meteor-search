@@ -14,7 +14,17 @@ Router.map(function () {
   });
 
   this.route('postPage', { 
-  	path: '/find/:keyword'
+  	path: '/find/:keyword',
+  	template: 'results',
+  	waitOn: function() { 
+  		return Meteor.subscribe('results'); 
+  	},
+	posts: function() { 
+		return Posts.runCommand( "text", { search: this.params.keyword } );
+	},
+	data: function () { // this.params is available inside the data function
+      return { keyword: this.params.keyword }
+    }
   });
 
 });

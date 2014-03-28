@@ -10,6 +10,10 @@ Meteor.publish("posts", function () {
   return Posts.find({}, {sort: {time: -1}, limit:25});
 });
 
+Meteor.publish("results", function () {
+  return Posts.runCommand( "text", { search: "paypal" } );
+});
+
 var twitter = Meteor.require('twitter'),
 	util = Meteor.require('util'),
 	twit = new twitter({

@@ -1,5 +1,5 @@
 <head>
-  <title>Learnio</title>
+  <title>Searchr</title>
   <link rel="stylesheet" type="text/css" href="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
 </head>
 
@@ -11,6 +11,14 @@
 	{{#each entries}}
     {{>post}}
 	{{/each}}
+</template>
+
+
+<template name="results">
+  {{#each entries}}
+    {{>post}}
+  {{/each}}
+
 </template>
 
 <template name="post">
