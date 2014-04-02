@@ -1,3 +1,28 @@
+Meteor.publish("posts", function () {
+  return Posts.find({}, {sort: {time: -1}, limit:25});
+});
+
+Meteor.publish("search_posts", function (post_ids) {
+  // console.log("PUBLISH", post_ids)
+  if(post_ids.length > 0){
+    return Posts.find({_id:{"$in":post_ids}},{sort: {time: -1}});
+  } else {
+    return Posts.find({}, {sort: {time: -1}, limit:25});
+  }
+  
+});
+
+Meteor.publish("search_results", function (keywords) {
+  console.log("s_r",keywords)
+  return Search_results.find({"keywords":keywords});
+});
+
+Meteor.publish("all_results", function (){
+  return Search_results.find({});
+});
+
+/*** SEARCH STARTS HERE ***/
+
 var SEARCH_INDEX = "post_search_index";
 var SEARCH_KEYWORDS = "math",
     _db, _sr, _posts; // global DB handles
@@ -9,9 +34,7 @@ MongoClient.connect('mongodb://127.0.0.1:27017/meteor', function(err, db) {
   _posts = db.collection('posts');
   _sr    = db.collection('search_results');
   _db    = db; // export the database handle
-  // fetchTweets(_posts);
-
-  // search('justin');
+  // fetchTweets(_posts); // used to get lots of content see: seed_content.js
 }) // end MongoClient
 
 // 

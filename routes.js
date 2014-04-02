@@ -22,31 +22,24 @@ Router.map(function () {
     }
   });
 
-  this.route('serps', { 
-  	path: '/find/:keywords',
+  this.route('search', { 
+  	path: '/search/:keywords',
   	template: 'results',
   	waitOn: function() { 
+      // insert keyword split/checking code here
       Meteor.call('search', this.params.keywords, function() {
         console.log("Search Run");
       });
       return Meteor.subscribe('search_results', this.params.keywords); 
   	},
-	  // posts: function() { 
-		 //  return Meteor.subscribe('search_results', this.params.keywords);
-   //    // return Posts.find({}, {sort: {time: -1}, limit:25});
-	  // },
-	  data: function () { // this.params is available inside the data function
+	  data: function () { // could reduce this to a map function but this is clear
       var post_ids = [],
       sr = Search_results.findOne({"keywords":this.params.keywords});
-      // console.log('ROUTER SR',sr.posts, sr.posts.length);
       if(sr.posts && sr.posts.length > 0 ){
         for(var i in sr.posts){
-          // console.log("ROUTER P", sr.posts[i])
           post_ids.push(sr.posts[i]._id);
         }
-        // console.log("ROUTER Result Count", post_ids);
       }
-
       return { 
         keywords: this.params.keywords,
         post_ids: post_ids

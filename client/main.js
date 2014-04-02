@@ -15,13 +15,10 @@ Template.post.helpers({
 	}
 })
 
-
-
-
 // highlight #hashtagged strings and make them clickable
 function highlight(text) {
 	var hashtagPattern = /\s*(#\w*)/gi, 
-	link = "/find/", 
+	link = "/search/", 
 	m, match, matches = [], t, url ='';
 
 	// initial check for hashtag in text
@@ -47,17 +44,6 @@ function highlight(text) {
     return text;
 }
 
-// var post = "RT @BestProAdvice: Great idea http://t.co/KYZVyKWOdO #GreatIdea #this";
-// console.log(highlight(post));
-
-// >> later:
-// highlight all links and make them clickable with target="_blank"
-
-// Template.results.entries = function(){
-// 	var entries = Posts.runCommand( "text", { search: "paypal" } );
-// 	console.log('hai!')
-// 	return entries;
-// };
 
 Meteor.subscribe('search_results', this.keywords);
 Meteor.subscribe('posts');
@@ -77,23 +63,7 @@ Template.results.helpers({
 	results: function() {
 		Meteor.subscribe('search_posts', this.post_ids);
   	return Posts.find({_id:{"$in":this.post_ids}},{sort: {time: -1}});
-	},
-	that: function() {
-		console.log("that!");
 	}
-	// posts: function() {
-	//   console.log("K:",this.keywords);
- //  	  var sr = Search_results.findOne({"keywords":this.keywords});
- //  		console.log('SR',sr);
-	//   if(sr.posts && sr.posts.length > 0 ){
-	//     var post_ids = [];
-	//     for(var i in sr.posts){
-	//       post_ids.push(sr.posts[i]._id);
-	//     }
-	//     console.log("Result Count", post_ids.length);
-	//   }
-	//   return Posts.find({_id:{"$in":post_ids}})
-	//   }
 });
 
 /**/
