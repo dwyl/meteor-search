@@ -1,69 +1,89 @@
-/*
-Meteor.publish('results', function(searchText) {
-    var doc = {};
-    var ids = searchPosts(searchText);
-    if (ids) {
-        doc._id = {
-            $in: ids
-        };
-    }
-    return Posts.find(doc);
-});
-*/
+var SEARCH_INDEX = "post_search_index";
+var SEARCH_KEYWORDS = "math",
+    _db, _sr, _posts; // global DB handles
 
-Meteor.startup(function () {
-    search_index_name = 'post_search_index'
- 
-    // console.dir(Meteor.posts);
+var MongoClient = Meteor.require('mongodb').MongoClient;
 
-    // Remove old indexes as you can only have one text index and if you add 
-    // more fields to your index then you will need to recreate it.
-    if(false) {
-        Posts._dropIndex(search_index_name);
-     
-        Posts._ensureIndex({
-            text: 'text',
-        }, {
-            name: search_index_name,
-            background:true
+MongoClient.connect('mongodb://127.0.0.1:27017/meteor', function(err, db) {
+  if(err) throw err;
+  _posts = db.collection('posts');
+  _sr    = db.collection('search_results');
+  _db    = db; // export the database handle
+  // fetchTweets(_posts);
+
+  // search('justin');
+}) // end MongoClient
+
+// 
+Meteor.methods({
+  search: function (keywords, callback){
+    console.log("- - - > SEARCHING for ",keywords, " < - - - ");
+    _db.command({text:"posts" , search: keywords }, function(err, res){ 
+      if(err) console.log(err);
+
+      var record = {};
+      record.keywords = keywords;
+      record.last_updated = new Date();
+      record.posts = [];
+
+      if (res.results && res.results.length > 0){
+        console.log("EXAMPLE:",res.results[0]);
+
+        for(var i in res.results){
+          // console.log(i, res.results[i].score, res.results[i].obj._id);
+          record.posts.push({
+            "_id":res.results[i].obj._id.toString(), 
+            "score":res.results[i].score
+          });
+        }
+
+        // check if an SR record already exists for this keyword
+        _sr.findOne({"keywords":keywords}, function(err, items) {
+          if(err) console.log(err);
+          console.log(items);
+          if(items && items._id){
+            record._id = items._id;
+            // upsert the results record
+            _sr.update(record, { upsert: true }, function(err,info){
+              if(err) console.log(err);
+              // console.log("INFO",info);
+            });
+          } else {
+            // insert new search results record
+            _sr.insert(record, function(err,info){
+              if(err) console.log(err);
+              console.log("INFO",info);
+            });
+          }
+
+        }) // end findOne (search results lookup for keywords)
+      } else { // no search results
+        console.log('no results');
+        _sr.insert(record, function(err,info){
+          if(err) console.log(err);
+          console.log("INFO",info);
         });
-    }
+      }
+      if (typeof callback !== 'undefined') {
+        callback();
+      }
+    }); // end command (search)
+  },
 
-    console.log(" - - - MongoDB SEARCH INDEX ", search_index_name, " CREATED - - -");
-    console.log(process.env.MONGO_URL);
-    // Meteor._RemoteCollectionDriver = new Meteor._RemoteCollectionDriver(process.env.MONGO_URL);
-});
-
-// Actual text search function
-_searchPosts = function (searchText) {
-    var Future = Npm.require('fibers/future');
-    var future = new Future();
-    MongoInternals.RemoteCollectionDriver.mongo.db.executeDbCommand({
-        text: 'posts',
-        search: searchText,
-        project: {
-          id: 1 // Only take the ids
-        }
-     }
-     , function(error, results) {
-        if (results && results.documents[0].ok === 1) {
-            future.ret(results.documents[0].results);
-        }
-        else {
-            future.ret('');
-        }
+  createIndex: function(collection) {
+    collection.indexInformation(function(err, index) { // all indexes on posts collection
+      // console.dir(index);
+      // console.log(typeof index)
+      if(typeof index[SEARCH_INDEX] === 'undefined'){
+        // create index
+        collection.ensureIndex( { text: 'text' }, {
+              name: SEARCH_INDEX,
+              background:true
+          }, function(err, info){
+          if(err) throw err;
+          // console.dir(info);
+        });
+      }
     });
-    return future.wait();
-};
- 
-// Helper that extracts the ids from the search results
-searchPosts = function (searchText) {
-    if (searchText && searchText !== '') {
-        var searchResults = _searchPosts(searchText);
-        var ids = [];
-        for (var i = 0; i < searchResults.length; i++) {
-            ids.push(searchResults[i].obj._id);
-        }
-        return ids;
-    }
-};
+  }
+});

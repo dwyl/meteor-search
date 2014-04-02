@@ -26,7 +26,10 @@ Router.map(function () {
   	path: '/find/:keywords',
   	template: 'results',
   	waitOn: function() { 
-  		return Meteor.subscribe('search_results', this.params.keywords); 
+      Meteor.call('search', this.params.keywords, function() {
+        console.log("Search Run");
+      });
+      return Meteor.subscribe('search_results', this.params.keywords); 
   	},
 	  // posts: function() { 
 		 //  return Meteor.subscribe('search_results', this.params.keywords);

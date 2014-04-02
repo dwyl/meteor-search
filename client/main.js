@@ -76,7 +76,7 @@ Template.results.helpers({
 	}, 
 	results: function() {
 		Meteor.subscribe('search_posts', this.post_ids);
-  	return Posts.find({_id:{"$in":this.post_ids}});
+  	return Posts.find({_id:{"$in":this.post_ids}},{sort: {time: -1}});
 	},
 	that: function() {
 		console.log("that!");

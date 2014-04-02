@@ -13,7 +13,7 @@ Meteor.publish("posts", function () {
 Meteor.publish("search_posts", function (post_ids) {
   // console.log("PUBLISH", post_ids)
   if(post_ids.length > 0){
-    return Posts.find({_id:{"$in":post_ids}});
+    return Posts.find({_id:{"$in":post_ids}},{sort: {time: -1}});
   } else {
     return Posts.find({}, {sort: {time: -1}, limit:25});
   }
@@ -21,32 +21,13 @@ Meteor.publish("search_posts", function (post_ids) {
 });
 
 Meteor.publish("search_results", function (keywords) {
-  // console.log("s_r",keywords)
+  console.log("s_r",keywords)
   return Search_results.find({"keywords":keywords});
 });
 
 Meteor.publish("all_results", function (){
   return Search_results.find({});
 });
-/*
-Meteor.publish("results", function(keywords) {
-  console.log("KEYWORDS", keywords)
-  var post_ids = [],
-    sr = Search_results.find({"keywords":keywords}).fetch();
-  console.log('SR',sr);
-  if(sr.posts && sr.posts.length > 0 ){
-
-    for(var i in sr.posts){
-      post_ids.push(sr.posts[i]._id);
-    }
-    console.log("SERVER Result Count", post_ids.length);
-  }
-  var posts = Posts.find({_id:{"$in":post_ids}}).fetch();
-  // console.log(posts);
-  return Posts.find({_id:{"$in":post_ids}});
-});
-*/
-
 
 
 var twitter = Meteor.require('twitter'),
@@ -94,7 +75,7 @@ Meteor.startup(function () {
 		});
 	}
 
-	// getTweets(function(){
-	// 	console.log('done');
-	// });
+	getTweets(function(){
+		console.log('done');
+	});
 });
