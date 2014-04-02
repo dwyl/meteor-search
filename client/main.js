@@ -15,6 +15,9 @@ Template.post.helpers({
 	}
 })
 
+
+
+
 // highlight #hashtagged strings and make them clickable
 function highlight(text) {
 	var hashtagPattern = /\s*(#\w*)/gi, 
@@ -50,8 +53,55 @@ function highlight(text) {
 // >> later:
 // highlight all links and make them clickable with target="_blank"
 
-Template.results.entries = function(){
-	var entries = Posts.runCommand( "text", { search: "paypal" } );
-	console.log('hai!')
-	return entries;
+// Template.results.entries = function(){
+// 	var entries = Posts.runCommand( "text", { search: "paypal" } );
+// 	console.log('hai!')
+// 	return entries;
+// };
+
+Meteor.subscribe('search_results', this.keywords);
+Meteor.subscribe('search_posts', this.post_ids);
+Meteor.subscribe('posts');
+Meteor.subscribe('all_results');
+
+
+Template.results.helpers({
+	avatarsrc: function() {
+		return this.avatar || 'http://www.fashionally.com/images/default_profile_pic.jpg';
+	},
+	highlightText: function() {
+		return highlight(this.text);
+	},
+	keywords: function() {
+		return this.keywords;
+	}, 
+	results: function() {
+		console.log("CLIENT post_ids",this.post_ids);
+		var posts = Posts.find({_id:{"$in":this.post_ids}}).fetch();
+		console.log("CLIENT",posts);
+  	return Posts.find({_id:{"$in":this.post_ids}});
+  		// return Posts.find({}, {sort: {time: -1}, limit:25});
+	},
+	that: function() {
+		console.log("that!");
+	}
+	// posts: function() {
+	//   console.log("K:",this.keywords);
+ //  	  var sr = Search_results.findOne({"keywords":this.keywords});
+ //  		console.log('SR',sr);
+	//   if(sr.posts && sr.posts.length > 0 ){
+	//     var post_ids = [];
+	//     for(var i in sr.posts){
+	//       post_ids.push(sr.posts[i]._id);
+	//     }
+	//     console.log("Result Count", post_ids.length);
+	//   }
+	//   return Posts.find({_id:{"$in":post_ids}})
+	//   }
+});
+
+/**/
+Template.results.go = function(){
+	console.log("K:",this.keywords);
+	console.log(this.results);
 };

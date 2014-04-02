@@ -31,15 +31,11 @@ If you're not using Mac ...
 ```
 mongod --bind_ip 127.0.0.1 --dbpath ~/code/meteor-search/.meteor/local/db --setParameter textSearchEnabled=true
 ```
-**Note**: your data directory will be different, my project is at /code/meteor-search
+**Note**: your data directory will be different, my project is at **~/code/meteor-search**
 (sub for what ever yours is)
 
-***OR*** if you prefer to not use the Meteor db directory, start with:
 
-
-
-
->> Confirm its working by visiting: http://localhost:28017/ (in your browser)
+> Confirm its working by visiting: http://localhost:28017/ (in your browser)
 
 ![MongoDB Running Locally](http://i.imgur.com/EyKEe6l.png)
 
@@ -76,7 +72,7 @@ var KEYWORDS = "katie, justin, kim, beyonce, miley, Obama, 1DWorld, OMG, FML, br
 
 Once you have some content you need to ensure that MongoDB is indexing it.
 
-Thankfully this is quite easy with MongoDB's **ensureIndex** method.
+Thankfully this is quite *easy* with MongoDB's **ensureIndex** method.
 In our case we are simply going to index the post's **text** field:
 
 ```
@@ -85,10 +81,16 @@ db.posts.ensureIndex( { text: "text" },{ background:true } );
 
 ![RoboMongo Showing Search Index Run](http://i.imgur.com/gSUQliP.png)
 
+> There's a **startup** script that does this automatically for you at: **server/indexes.js**
+
 Depending on how much data you have already inserted, this may take some time...
 I had 92k posts (tweets) in my DB when I ran it and it took less than 10 seconds!
 
-- More detail on **ensureIndex**: http://docs.mongodb.org/manual/core/index-text/
+More detail on **ensureIndex**: 
+
+- http://docs.mongodb.org/manual/core/index-text/
+- http://docs.mongodb.org/manual/reference/method/db.collection.ensureIndex/
+
 
 #### Query to Search for a Keyword
 
@@ -163,6 +165,7 @@ mrt add iron-router
 
 ## Research
 
+- MeteorPedia Full-text Search: http://www.meteorpedia.com/read/Fulltext_search
 - Using Elastic Search with MongoDB: https://github.com/matteodem/meteor-easy-search
 - Meteor (MongoDB) Full-text search: http://stackoverflow.com/questions/14567856/full-text-search-with-meteor-js-and-mongodb (non-answer!)
 - Lunr JS "Simple" full-text search in your browser: http://lunrjs.com/ 

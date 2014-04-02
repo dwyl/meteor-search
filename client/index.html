@@ -1,6 +1,7 @@
 <head>
   <title>Searchr</title>
-  <link rel="stylesheet" type="text/css" href="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+  <link rel="stylesheet" type="text/css" 
+  href="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
 </head>
 
 <body>
@@ -15,9 +16,14 @@
 
 
 <template name="results">
-  {{#each entries}}
+  <h1> hello </h1>
+  <p>{{keywords}}</p>
+
+  {{#each results}}
     {{>post}}
   {{/each}}
+
+  {{that}}
 
 </template>
 
