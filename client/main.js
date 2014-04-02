@@ -21,7 +21,7 @@ Template.post.helpers({
 // highlight #hashtagged strings and make them clickable
 function highlight(text) {
 	var hashtagPattern = /\s*(#\w*)/gi, 
-	link = "find/", 
+	link = "/find/", 
 	m, match, matches = [], t, url ='';
 
 	// initial check for hashtag in text
@@ -60,7 +60,6 @@ function highlight(text) {
 // };
 
 Meteor.subscribe('search_results', this.keywords);
-Meteor.subscribe('search_posts', this.post_ids);
 Meteor.subscribe('posts');
 Meteor.subscribe('all_results');
 
@@ -76,11 +75,8 @@ Template.results.helpers({
 		return this.keywords;
 	}, 
 	results: function() {
-		console.log("CLIENT post_ids",this.post_ids);
-		var posts = Posts.find({_id:{"$in":this.post_ids}}).fetch();
-		console.log("CLIENT",posts);
+		Meteor.subscribe('search_posts', this.post_ids);
   	return Posts.find({_id:{"$in":this.post_ids}});
-  		// return Posts.find({}, {sort: {time: -1}, limit:25});
 	},
 	that: function() {
 		console.log("that!");

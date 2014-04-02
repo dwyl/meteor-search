@@ -28,16 +28,15 @@ Router.map(function () {
   	waitOn: function() { 
   		return Meteor.subscribe('search_results', this.params.keywords); 
   	},
-	  posts: function() { 
-		  return Meteor.subscribe('search_results', this.params.keywords);
-      // return Posts.find({}, {sort: {time: -1}, limit:25});
-	  },
+	  // posts: function() { 
+		 //  return Meteor.subscribe('search_results', this.params.keywords);
+   //    // return Posts.find({}, {sort: {time: -1}, limit:25});
+	  // },
 	  data: function () { // this.params is available inside the data function
       var post_ids = [],
       sr = Search_results.findOne({"keywords":this.params.keywords});
-      console.log('ROUTER SR',sr.posts, sr.posts.length);
+      // console.log('ROUTER SR',sr.posts, sr.posts.length);
       if(sr.posts && sr.posts.length > 0 ){
-
         for(var i in sr.posts){
           // console.log("ROUTER P", sr.posts[i])
           post_ids.push(sr.posts[i]._id);

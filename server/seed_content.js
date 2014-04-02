@@ -11,7 +11,7 @@ Meteor.publish("posts", function () {
 });
 
 Meteor.publish("search_posts", function (post_ids) {
-  console.log("PUBLISH", post_ids)
+  // console.log("PUBLISH", post_ids)
   if(post_ids.length > 0){
     return Posts.find({_id:{"$in":post_ids}});
   } else {
@@ -21,7 +21,7 @@ Meteor.publish("search_posts", function (post_ids) {
 });
 
 Meteor.publish("search_results", function (keywords) {
-  console.log("s_r",keywords)
+  // console.log("s_r",keywords)
   return Search_results.find({"keywords":keywords});
 });
 
