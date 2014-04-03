@@ -1,4 +1,7 @@
-// Posts = new Meteor.Collection('posts');
+Meteor.subscribe('search_results', this.keywords);
+Meteor.subscribe('posts');
+Meteor.subscribe('all_results');
+
 
 Template.posts.entries = function(){
 	var entries = Posts.find();
@@ -44,12 +47,6 @@ function highlight(text) {
     return text;
 }
 
-
-Meteor.subscribe('search_results', this.keywords);
-Meteor.subscribe('posts');
-Meteor.subscribe('all_results');
-
-
 Template.results.helpers({
 	avatarsrc: function() {
 		return this.avatar || 'http://www.fashionally.com/images/default_profile_pic.jpg';
@@ -65,9 +62,3 @@ Template.results.helpers({
   	return Posts.find({_id:{"$in":this.post_ids}},{sort: {time: -1}});
 	}
 });
-
-/**/
-Template.results.go = function(){
-	console.log("K:",this.keywords);
-	console.log(this.results);
-};

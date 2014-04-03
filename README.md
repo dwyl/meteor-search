@@ -8,7 +8,7 @@ People want to find stuff.
 
 Full-text search.
 
-![Searchr screens](http://i.imgur.com/Xkz7VyG.png)
+![Searchr screens](http://i.imgur.com/hoTv9Yx.png)
 
 ## How
 
