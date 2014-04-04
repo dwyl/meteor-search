@@ -13,13 +13,15 @@ Example app:
 ![Searchr screens](http://i.imgur.com/hoTv9Yx.png)
 
 
-
 ## How
 
 ### *Get* "*Real*" MongoDB
 
+By default, Meteor starts up its own instance of MongoDB, this does not have
+full-text indexing/search, so you need to ***go native***.
+
 If you don't already have a "Real" installation of MongoDB on your system,
-install it with **Brew**:
+install it with **HomeBrew**:
 
 ```
 brew update
@@ -31,20 +33,25 @@ If you're not using Mac ...
 - Linux: http://docs.mongodb.org/manual/tutorial/install-mongodb-on-linux/
 - Windows? *ouch*... http://www.geekyprojects.com/tutorials/how-to-use-virtualbox-tutorial/
 
-### Startup MongoDB
+### Startup MongoDB with textSearchEnabled=true
+
+In a terminal/console window startup up your mongod databse with the following command:
 
 ```
-mongod --bind_ip 127.0.0.1 --dbpath ~/code/meteor-search/.meteor/local/db --setParameter textSearchEnabled=true
+mongod --dbpath ~/code/meteor-search/.meteor/local/db --setParameter textSearchEnabled=true
 ```
-**Note**: your data directory will be different, my project is at **~/code/meteor-search**
-(sub for what ever yours is)
+**Notes**: 
+- **--dbpath** speficies where your data is. Your data directory will be different, 
+my project is at **~/code/meteor-search** (replace for what ever yours is)
+- **--setParameter** lets you enable full-text search at run time. (you can do this in a 
+config file if you prefer see: http://docs.mongodb.org/manual/reference/configuration-options/)
 
 
 > Confirm its working by visiting: http://localhost:28017/ (in your browser)
 
 ![MongoDB Running Locally](http://i.imgur.com/EyKEe6l.png)
 
-More info on enabling text search: http://docs.mongodb.org/manual/tutorial/enable-text-search/
+**More info** on enabling text search: http://docs.mongodb.org/manual/tutorial/enable-text-search/
 
 ### Start Meteor with the "Real" MongoDB
 
@@ -52,7 +59,7 @@ More info on enabling text search: http://docs.mongodb.org/manual/tutorial/enabl
 MONGO_URL="mongodb://localhost:27017/meteor" meteor
 ```
 
-If the app starts up ok, you're in business!
+If the app starts up ok, its ***game on***!
 (otherwise *submit a bug* to this repo and I will wil try to assist you!)
 
 
