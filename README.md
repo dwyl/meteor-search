@@ -2,13 +2,17 @@
 
 ## WHY
 
-People want to find stuff.
+People want to find content. Good ***search is essential***.
 
 ## What
 
-Full-text search.
+Full-text search. Using ***Native*** MongoDB Commands.
+
+Example app:
 
 ![Searchr screens](http://i.imgur.com/hoTv9Yx.png)
+
+
 
 ## How
 
@@ -154,17 +158,57 @@ chainable so *far from perfect*! Will tidy up in next itteration.
 
 
 
+## Notes
 
+### Setting Up Full Text Search on MongoHQ
+
+MongoHQ does **not** have (full) text indexing **enabled by default**. 
+
+![MongoHQ Shows Error When Creating Index](https://pbs.twimg.com/media/BkUH5CrCIAAcfRx.png "MongoHQ Error")
+
+But they were quick to help me when I asked for it: 
+https://twitter.com/nelsonic/statuses/451758108285489152 
+
+![MongoHQ Enables Text Search](http://i.imgur.com/AlUvCQw.png "Text Search Enabled")
+
+You will need to set up your indexes *manually* with a command 
+(either in your Mongo Client - We use RoboMongo - or the Web Interface)
+
+![MongoHQ Showing Text Index on Posts.body](http://i.imgur.com/cHIzS4B.png "MongoHQ Full Text Index")
+
+Once that is set up you are good to go. 
+
+### Searching Through Your Posts
+
+In RoboMongo (or what ever MongoDB Client of your choice) use the following
+command to 
+
+```
+db.COLLECTION.runCommand( "text", { search: "KEYWORDS" } );
+// e.g:
+db.posts.runCommand( "text", { search: "learn" } );
+```
+
+![RoboMongo Shows Results of runCommand](http://i.imgur.com/FLjDGl3.png "Search Query Results")
 
 ### Iron Router
+
+This project uses Iron Router for url routing.
+If you are not familiar with it 
+(you *should* be if you're serious about using Meteor), read:
+
+- Tutorial: http://www.manuel-schoebel.com/blog/iron-router-tutorial
+- Docs: https://github.com/EventedMind/iron-router
+- 
+- Advanced: https://properapp.com/meteor/advanced-routing-in-meteor-navigation-state-w/#.Uz8BIS9dVX4
+
 
 ```
 mrt add iron-router
 ```
 
 
-
-## Research
+### Research
 
 - MeteorPedia Full-text Search: http://www.meteorpedia.com/read/Fulltext_search
 - Using Elastic Search with MongoDB: https://github.com/matteodem/meteor-easy-search
