@@ -153,9 +153,41 @@ function highlight(text) {
 }
 ```
 
-**Note**: the *link pattern* is *hard-coded* `find/:keyword` and method is not 
-chainable so *far from perfect*! Will tidy up in next itteration.
+Or as a handlebars template helper method:
 
+```
+// place this code in your main.js or inside an Meteor.isClient check
+Handlebars.registerHelper('highlight', function(text) {
+  var hashtagPattern = /\s*(#\w*)/gi, 
+    link = "/search/", 
+    m, match, matches = [], t, url ='';
+
+  // initial check for hashtag in text
+  if(text.indexOf("#") !== -1) {   
+
+      // find all #keywords (that have hashtags)
+      while ( (match = hashtagPattern.exec(text)) ) {
+        matches.push(match[0]);
+      }
+
+      // replace any #keywords with <a href="/search/keywords">#keywords</a>
+      for(var j=0; j < matches.length; j++) {
+        m = matches[j].replace(/\s/g, "");
+        // console.log('match',m);
+        url = link+m;
+        url = url.replace('#',"").toLowerCase(); // remove hashtag for lookup
+        t = " <a class='hashtag' href='"+url+"'>"+m+"</a> "; // replace with
+        replace = new RegExp("\\s*("+m+")", 'gi');
+
+        text = text.replace(replace, t);
+      }
+    }
+  return text;
+});
+```
+
+**Note**: the *link pattern* is *hard-coded* `/search/:keywords` and method is not 
+chainable so *far from perfect*! Will tidy up in next itteration.
 
 
 ## Notes
@@ -171,7 +203,7 @@ https://twitter.com/nelsonic/statuses/451758108285489152
 
 ![MongoHQ Enables Text Search](http://i.imgur.com/AlUvCQw.png "Text Search Enabled")
 
-You will need to set up your indexes *manually* with a command 
+You will need to set up your indexes *manually* with a command <br />
 (either in your Mongo Client - We use RoboMongo - or the Web Interface)
 
 ![MongoHQ Showing Text Index on Posts.body](http://i.imgur.com/cHIzS4B.png "MongoHQ Full Text Index")
@@ -181,7 +213,7 @@ Once that is set up you are good to go.
 ### Searching Through Your Posts
 
 In RoboMongo (or what ever MongoDB Client of your choice) use the following
-command to 
+command to search through your collection (on the field(s) you specified as searchable)
 
 ```
 db.COLLECTION.runCommand( "text", { search: "KEYWORDS" } );
