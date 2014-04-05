@@ -53,6 +53,7 @@ config file if you prefer see: http://docs.mongodb.org/manual/reference/configur
 
 **More info** on enabling text search: http://docs.mongodb.org/manual/tutorial/enable-text-search/
 
+
 #### Start Meteor with the "Real" MongoDB
 
 ```
@@ -193,6 +194,8 @@ Handlebars.registerHelper('highlight', function(text) {
 
 **Note**: the *link pattern* is *hard-coded* `/search/:keywords` and method is not 
 chainable so *far from perfect*! Will tidy up in next itteration.
+
+
 
 
 ## Notes
