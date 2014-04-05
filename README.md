@@ -15,7 +15,7 @@ Example app:
 
 ## How
 
-### *Get* "*Real*" MongoDB
+### Step 1 - *Get* "*Real*" MongoDB
 
 By default, Meteor starts up its own instance of MongoDB, this does not have
 full-text indexing/search, so you need to ***go native***.
@@ -33,7 +33,7 @@ If you're not using Mac ...
 - Linux: http://docs.mongodb.org/manual/tutorial/install-mongodb-on-linux/
 - Windows? *ouch*... http://www.geekyprojects.com/tutorials/how-to-use-virtualbox-tutorial/
 
-### Startup MongoDB with textSearchEnabled=true
+#### Startup MongoDB with textSearchEnabled=true
 
 In a terminal/console window startup up your mongod databse with the following command:
 
@@ -53,19 +53,18 @@ config file if you prefer see: http://docs.mongodb.org/manual/reference/configur
 
 **More info** on enabling text search: http://docs.mongodb.org/manual/tutorial/enable-text-search/
 
-### Start Meteor with the "Real" MongoDB
+#### Start Meteor with the "Real" MongoDB
 
 ```
 MONGO_URL="mongodb://localhost:27017/meteor" meteor
 ```
 
-If the app starts up ok, its ***game on***!
+If the app starts up ok, its ***game on***! <br />
 (otherwise *submit a bug* to this repo and I will wil try to assist you!)
 
+### Step 2 - Get (Test) Content 
 
-### Step 1 - Get Lots of Data
-
-#### Seed Content
+#### Seed Content (From Twitter Streaming API)
 
 When you boot this app it will access the Twitter Streaming API and fetch 
 thousands of tweets for you to search through (*locally*).
@@ -80,15 +79,15 @@ If you want ***INSANE*** amounts of (*noisy*) data
 var KEYWORDS = "katie, justin, kim, beyonce, miley, Obama, 1DWorld, OMG, FML, breaking, news";
 ```
 
-### Step 2 - Index the Text (in MongoDB)
+### Step 3 - Index the Text (in MongoDB)
 
 Once you have some content you need to ensure that MongoDB is indexing it.
 
 Thankfully this is quite *easy* with MongoDB's **ensureIndex** method.
-In our case we are simply going to index the post's **text** field:
+In our case we are simply going to index the post's **body** field:
 
 ```
-db.posts.ensureIndex( { text: "text" },{ background:true } );
+db.posts.ensureIndex( { body: "text" },{ background:true } );
 ```
 
 ![RoboMongo Showing Search Index Run](http://i.imgur.com/gSUQliP.png)
@@ -110,7 +109,7 @@ More detail on **ensureIndex**:
 db.posts.runCommand( "text", { search: "paypal" } )
 ```
 
-While this works find in RoboMongo:
+While this works fine in RoboMongo:
 
 ![RoboMongo Search Results](http://i.imgur.com/KYW2jYc.png)
 
@@ -124,8 +123,7 @@ So ...
 >> http://stackoverflow.com/questions/17159626/implementing-mongodb-2-4s-full-text-search-in-a-meteor-app/18258688#18258688
 
 
-
-### Step 3 - Highlighting Hashtags
+### Step 4 - Highlighting Hashtags (Clickable)
 
 I wrote a simple regular expression to turn hashtagged keywords into links.
 
@@ -139,12 +137,12 @@ function highlight(text) {
 	// initial check for hashtag in text
 	if(text.indexOf("#") !== -1) {   
 
-      // in many cases there will be more than one hashtagged word in a block of text 
+      // find all #keywords (strings that have been hash-tagged)
       while ( (match = hashtagPattern.exec(text)) ) {
         matches.push(match[0]);
       }
 
-      // loop throught all the matches identified above and replace them with a bold colored text
+      // replace any #keywords with <a href="/search/keywords">#keywords</a>
       for(var j=0; j < matches.length; j++) {
         m = matches[j].replace(/\s/g, "");
         // console.log('match',m);
@@ -230,22 +228,24 @@ db.posts.runCommand( "text", { search: "learn" } );
 
 ![RoboMongo Shows Results of runCommand](http://i.imgur.com/FLjDGl3.png "Search Query Results")
 
+
 ### Iron Router
 
-This project uses Iron Router for url routing.
+This project uses Iron Router for url routing. <br />
 If you are not familiar with it 
 (you *should* be if you're serious about using Meteor), read:
 
 - Tutorial: http://www.manuel-schoebel.com/blog/iron-router-tutorial
 - Docs: https://github.com/EventedMind/iron-router
-- 
+- [Discover Meteor](https://www.discovermeteor.com/) Uses Iron Router extensively. 
+Read it for a good step-by-step intro.
 - Advanced: https://properapp.com/meteor/advanced-routing-in-meteor-navigation-state-w/#.Uz8BIS9dVX4
-
 
 ```
 mrt add iron-router
 ```
-
+See the **routes.js** file for more detail on how I've wired this up to
+accept request in the form: `http://yoursite.com/search/:keywords`
 
 ### Research
 
