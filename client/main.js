@@ -18,21 +18,33 @@ Template.post.helpers({
 	}
 })
 
-// highlight #hashtagged strings and make them clickable
-function highlight(text) {
-	var hashtagPattern = /\s*(#\w*)/gi, 
-	link = "/search/", 
-	m, match, matches = [], t, url ='';
+Template.results.helpers({
+	avatarsrc: function() {
+		return this.avatar || 'http://www.fashionally.com/images/default_profile_pic.jpg';
+	},
+	keywords: function() {
+		return this.keywords;
+	}, 
+	results: function() {
+		Meteor.subscribe('search_posts', this.post_ids);
+  	return Posts.find({_id:{"$in":this.post_ids}},{sort: {time: -1}});
+	}
+});
 
-	// initial check for hashtag in text
-	if(text.indexOf("#") !== -1) {   
+Handlebars.registerHelper('highlight', function(text) {
+  var hashtagPattern = /\s*(#\w*)/gi, 
+    link = "/search/", 
+    m, match, matches = [], t, url ='';
 
-      // in many cases there will be more than one hashtagged word in a block of text 
+  // initial check for hashtag in text
+  if(text.indexOf("#") !== -1) {   
+
+      // find all #keywords (that have hashtags)
       while ( (match = hashtagPattern.exec(text)) ) {
         matches.push(match[0]);
       }
 
-      // loop throught all the matches identified above and replace them with a bold colored text
+      // replace any #keywords with <a href="/search/keywords">#keywords</a>
       for(var j=0; j < matches.length; j++) {
         m = matches[j].replace(/\s/g, "");
         // console.log('match',m);
@@ -44,21 +56,5 @@ function highlight(text) {
         text = text.replace(replace, t);
       }
     }
-    return text;
-}
-
-Template.results.helpers({
-	avatarsrc: function() {
-		return this.avatar || 'http://www.fashionally.com/images/default_profile_pic.jpg';
-	},
-	highlightText: function() {
-		return highlight(this.text);
-	},
-	keywords: function() {
-		return this.keywords;
-	}, 
-	results: function() {
-		Meteor.subscribe('search_posts', this.post_ids);
-  	return Posts.find({_id:{"$in":this.post_ids}},{sort: {time: -1}});
-	}
+  return text;
 });

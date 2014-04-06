@@ -56,12 +56,17 @@ config file if you prefer see: http://docs.mongodb.org/manual/reference/configur
 
 #### Start Meteor with the "Real" MongoDB
 
+Because we are using "real" Mongo we need to specifiy it when starting meteor.
+(This only applies while you are developing in production you would set an ENV
+
+)
 ```
 MONGO_URL="mongodb://localhost:27017/meteor" meteor
 ```
 
 If the app starts up ok, its ***game on***! <br />
 (otherwise *submit a bug* to this repo and I will wil try to assist you!)
+
 
 ### Step 2 - Get (Test) Content 
 
@@ -75,7 +80,7 @@ Or a few hours if you want hundreds of thousands to stress test search)
 If you want ***LOTS*** of content very quickly, change the KEYWORD to **news**.
 
 If you want ***INSANE*** amounts of (*noisy*) data 
-(to symulate *volume*), use:
+(to symulate *high volume*), use:
 ```
 var KEYWORDS = "katie, justin, kim, beyonce, miley, Obama, 1DWorld, OMG, FML, breaking, news";
 ```
@@ -127,42 +132,12 @@ So ...
 ### Step 4 - Highlighting Hashtags (Clickable)
 
 I wrote a simple regular expression to turn hashtagged keywords into links.
-
-```javascript
-// highlight #hashtagged strings and make them clickable
-function highlight(text) {
-	var hashtagPattern = /\s*(#\w*)/gi, 
-	link = "find/", 
-	m, match, matches = [], t, url ='';
-
-	// initial check for hashtag in text
-	if(text.indexOf("#") !== -1) {   
-
-      // find all #keywords (strings that have been hash-tagged)
-      while ( (match = hashtagPattern.exec(text)) ) {
-        matches.push(match[0]);
-      }
-
-      // replace any #keywords with <a href="/search/keywords">#keywords</a>
-      for(var j=0; j < matches.length; j++) {
-        m = matches[j].replace(/\s/g, "");
-        // console.log('match',m);
-        url = link+m;
-        url = url.replace('#',"").toLowerCase(); // remove hashtag for lookup
-        t = " <a class='hashtag' href='"+url+"'>"+m+"</a> "; // replace with
-        replace = new RegExp("\\s*("+m+")", 'gi');
-
-        text = text.replace(replace, t);
-      }
-    }
-    return text;
-}
-```
-
-Or as a handlebars template helper method:
+Instead of polluting the raw data with links (and bloating our records)
+We finde/replace the #keywords at render time (client-side) using 
+a Handlebars template helper method:
 
 ```
-// place this code in your main.js or inside an Meteor.isClient check
+// place this code in your main.js or inside an Meteor.isClient block
 Handlebars.registerHelper('highlight', function(text) {
   var hashtagPattern = /\s*(#\w*)/gi, 
     link = "/search/", 
@@ -193,8 +168,7 @@ Handlebars.registerHelper('highlight', function(text) {
 ```
 
 **Note**: the *link pattern* is *hard-coded* `/search/:keywords` and method is not 
-chainable so *far from perfect*! Will tidy up in next itteration.
-
+chainable so *far from perfect*! Send a pull-request if you improve on it. :-)
 
 
 
@@ -217,6 +191,7 @@ You will need to set up your indexes *manually* with a command <br />
 ![MongoHQ Showing Text Index on Posts.body](http://i.imgur.com/cHIzS4B.png "MongoHQ Full Text Index")
 
 Once that is set up you are good to go. 
+
 
 ### Searching Through Your Posts
 
@@ -250,6 +225,7 @@ mrt add iron-router
 See the **routes.js** file for more detail on how I've wired this up to
 accept request in the form: `http://yoursite.com/search/:keywords`
 
+
 ### Research
 
 - MeteorPedia Full-text Search: http://www.meteorpedia.com/read/Fulltext_search
@@ -257,4 +233,8 @@ accept request in the form: `http://yoursite.com/search/:keywords`
 - Meteor (MongoDB) Full-text search: http://stackoverflow.com/questions/14567856/full-text-search-with-meteor-js-and-mongodb (non-answer!)
 - Lunr JS "Simple" full-text search in your browser: http://lunrjs.com/ 
 (but our data is in MongoDB so not much use...)
+
+#### Deploying to Heroku?
+
+- Heroku ENVironment variables (in Node.js Apps): https://devcenter.heroku.com/articles/nodejs-support
 
