@@ -206,6 +206,11 @@ db.posts.runCommand( "text", { search: "learn" } );
 
 ![RoboMongo Shows Results of runCommand](http://i.imgur.com/FLjDGl3.png "Search Query Results")
 
+Search results returned in **0.15 seconds** when I had **327k posts** in 
+the collection:
+
+![Post Count](http://i.imgur.com/scpYgMb.png "Post Count 327k")
+
 
 ### Iron Router
 

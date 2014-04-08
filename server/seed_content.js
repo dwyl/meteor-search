@@ -6,19 +6,27 @@ var POST_COUNT = 10000;
 var twitter = Meteor.require('twitter'),
 	util = Meteor.require('util'),
 	twit = new twitter({
-    consumer_key: 'wyir0dDuntZkbXF0jQps8w',
-    consumer_secret: 'hrWA0pEoGGD9DiJf1tanhkgYOCNwFL7yN6L8QCc3Nc',
-    access_token_key: '2389016353-maPa5ax7R3VcXnFBROMb8HPEwJsO64So62dAHnK',
-    access_token_secret: 'iKuvsT3tZd0Mk8ACUCfi6KzeN3Fvbr5EnyzDyHIlUgrrA'
+    consumer_key: 'U8N2QzFu6Hv4BB3BjObIy9HDF',
+    consumer_secret: 'rJWtj5NneVWmfT8STB7YN6IBkLreke9JoJhP3nIe0ffnBq91Xv',
+    access_token_key: '2389016353-4tCDaVgRFkkNsWOj1sb6fZQ8s0bINqD5jJGmqRC',
+    access_token_secret: 'OEFnemh9FlSkOX5YuNP46XsDh3EutbHiiKq6q8wV2Pwko'
 });
 
 Meteor.startup(function () {
-
+  PostsCount.remove({}); // empty
   var insertTweet = Meteor.bindEnvironment(function(tweet) {
     Posts.insert(tweet);
   });
 
+  var updatePostsCount = Meteor.bindEnvironment(function(){
+    var count = Posts.find().count();
+    console.log(count);
+    // PostsCount.remove({});
+    PostsCount.insert({"count":count, "time":new Date() });
+  });
+
 	function getTweets(callback){
+    console.log("HAI!");
 		twit.stream("statuses/filter", {
 		  track: KEYWORDS, 'lang':'en'
 		  }, function(stream) {
@@ -36,14 +44,12 @@ Meteor.startup(function () {
           if(data.retweeted_status && parseInt(data.retweeted_status.retweet_count, 10) > 0){
           	// console.log(data)
           }
-          // console.log(data.lang)
-          // if(data.lang === 'en') { // && tweet.img) {
-		    	if(tweet.text.indexOf("#") !== -1) {   
-            insertTweet(tweet);        
-          }	
-          // }
+          // console.log(data.text);
+		    	// if(tweet.text.indexOf("#") !== -1) {   
+          insertTweet(tweet);  
+          updatePostsCount();
+          // }	
 
-        	// console.log(data.retweeted_status); // full tweet
 		    });
 		});
 	}
@@ -51,4 +57,5 @@ Meteor.startup(function () {
 	getTweets(function(){
 		console.log('done');
 	});
+
 });

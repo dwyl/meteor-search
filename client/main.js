@@ -1,7 +1,8 @@
+
 Meteor.subscribe('search_results', this.keywords);
 Meteor.subscribe('posts');
 Meteor.subscribe('all_results');
-
+Meteor.subscribe('postsCount');
 
 Template.posts.entries = function(){
 	var entries = Posts.find();
@@ -57,4 +58,14 @@ Handlebars.registerHelper('highlight', function(text) {
       }
     }
   return text;
+});
+
+Handlebars.registerHelper('postsCount', function() {
+	var result = PostsCount.find({}, {sort: {time: -1}, limit:1}).fetch();
+	if(result && result[0] && result[0].count){
+		// console.log(result[0].count);
+		return result[0].count;
+	} else {
+		return 0;
+	}
 });
