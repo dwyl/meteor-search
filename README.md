@@ -1,5 +1,10 @@
 # Meteor Search
 
+## Note
+
+This is **"Spike" Code**. It ***works*** but has **Zero Unit Tests**
+so is for ***Learning Purposes Only***!
+
 ## WHY
 
 People want to find content. Good ***search is essential***.
@@ -40,10 +45,10 @@ In a terminal/console window startup up your mongod databse with the following c
 ```
 mongod --dbpath ~/code/meteor-search/.meteor/local/db --setParameter textSearchEnabled=true
 ```
-**Notes**: 
-- **--dbpath** speficies where your data is. Your data directory will be different, 
+**Notes**:
+- **--dbpath** speficies where your data is. Your data directory will be different,
 my project is at **~/code/meteor-search** (replace for what ever yours is)
-- **--setParameter** lets you enable full-text search at run time. (you can do this in a 
+- **--setParameter** lets you enable full-text search at run time. (you can do this in a
 config file if you prefer see: http://docs.mongodb.org/manual/reference/configuration-options/)
 
 
@@ -68,18 +73,18 @@ If the app starts up ok, its ***game on***! <br />
 (otherwise *submit a bug* to this repo and I will wil try to assist you!)
 
 
-### Step 2 - Get (Test) Content 
+### Step 2 - Get (Test) Content
 
 #### Seed Content (From Twitter Streaming API)
 
-When you boot this app it will access the Twitter Streaming API and fetch 
+When you boot this app it will access the Twitter Streaming API and fetch
 thousands of tweets for you to search through (*locally*).
-(leave it running for a few minutes and you will get 10k posts. 
+(leave it running for a few minutes and you will get 10k posts.
 Or a few hours if you want hundreds of thousands to stress test search)
 
 If you want ***LOTS*** of content very quickly, change the KEYWORD to **news**.
 
-If you want ***INSANE*** amounts of (*noisy*) data 
+If you want ***INSANE*** amounts of (*noisy*) data
 (to symulate *high volume*), use:
 ```
 var KEYWORDS = "katie, justin, kim, beyonce, miley, Obama, 1DWorld, OMG, FML, breaking, news";
@@ -103,7 +108,7 @@ db.posts.ensureIndex( { body: "text" },{ background:true } );
 Depending on how much data you have already inserted, this may take some time...
 I had 92k posts (tweets) in my DB when I ran it and it took less than 10 seconds!
 
-More detail on **ensureIndex**: 
+More detail on **ensureIndex**:
 
 - http://docs.mongodb.org/manual/core/index-text/
 - http://docs.mongodb.org/manual/reference/method/db.collection.ensureIndex/
@@ -124,7 +129,7 @@ Meteor does not support the **runCommand** method:
 
 ![Meteor Hates runCommand](http://i.imgur.com/x62G6N4.png)
 
-So ... 
+So ...
 
 >> http://stackoverflow.com/questions/17159626/implementing-mongodb-2-4s-full-text-search-in-a-meteor-app/18258688#18258688
 
@@ -133,18 +138,18 @@ So ...
 
 I wrote a simple regular expression to turn hashtagged keywords into links.
 Instead of polluting the raw data with links (and bloating our records)
-We finde/replace the #keywords at render time (client-side) using 
+We finde/replace the #keywords at render time (client-side) using
 a Handlebars template helper method:
 
 ```
 // place this code in your main.js or inside an Meteor.isClient block
 Handlebars.registerHelper('highlight', function(text) {
-  var hashtagPattern = /\s*(#\w*)/gi, 
-    link = "/search/", 
+  var hashtagPattern = /\s*(#\w*)/gi,
+    link = "/search/",
     m, match, matches = [], t, url ='';
 
   // initial check for hashtag in text
-  if(text.indexOf("#") !== -1) {   
+  if(text.indexOf("#") !== -1) {
 
       // find all #keywords (that have hashtags)
       while ( (match = hashtagPattern.exec(text)) ) {
@@ -167,7 +172,7 @@ Handlebars.registerHelper('highlight', function(text) {
 });
 ```
 
-**Note**: the *link pattern* is *hard-coded* `/search/:keywords` and method is not 
+**Note**: the *link pattern* is *hard-coded* `/search/:keywords` and method is not
 chainable so *far from perfect*! Send a pull-request if you improve on it. :-)
 
 
@@ -176,12 +181,12 @@ chainable so *far from perfect*! Send a pull-request if you improve on it. :-)
 
 ### Setting Up Full Text Search on MongoHQ
 
-MongoHQ does **not** have (full) text indexing **enabled by default**. 
+MongoHQ does **not** have (full) text indexing **enabled by default**.
 
 ![MongoHQ Shows Error When Creating Index](https://pbs.twimg.com/media/BkUH5CrCIAAcfRx.png "MongoHQ Error")
 
-But they were quick to help me when I asked for it: 
-https://twitter.com/nelsonic/statuses/451758108285489152 
+But they were quick to help me when I asked for it:
+https://twitter.com/nelsonic/statuses/451758108285489152
 
 ![MongoHQ Enables Text Search](http://i.imgur.com/AlUvCQw.png "Text Search Enabled")
 
@@ -190,7 +195,7 @@ You will need to set up your indexes *manually* with a command <br />
 
 ![MongoHQ Showing Text Index on Posts.body](http://i.imgur.com/cHIzS4B.png "MongoHQ Full Text Index")
 
-Once that is set up you are good to go. 
+Once that is set up you are good to go.
 
 
 ### Searching Through Your Posts
@@ -206,7 +211,7 @@ db.posts.runCommand( "text", { search: "learn" } );
 
 ![RoboMongo Shows Results of runCommand](http://i.imgur.com/FLjDGl3.png "Search Query Results")
 
-Search results returned in **0.15 seconds** when I had **327k posts** in 
+Search results returned in **0.15 seconds** when I had **327k posts** in
 the collection:
 
 ![Post Count](http://i.imgur.com/scpYgMb.png "Post Count 327k")
@@ -215,12 +220,12 @@ the collection:
 ### Iron Router
 
 This project uses Iron Router for url routing. <br />
-If you are not familiar with it 
+If you are not familiar with it
 (you *should* be if you're serious about using Meteor), read:
 
 - Tutorial: http://www.manuel-schoebel.com/blog/iron-router-tutorial
 - Docs: https://github.com/EventedMind/iron-router
-- [Discover Meteor](https://www.discovermeteor.com/) Uses Iron Router extensively. 
+- [Discover Meteor](https://www.discovermeteor.com/) Uses Iron Router extensively.
 Read it for a good step-by-step intro.
 - Advanced: https://properapp.com/meteor/advanced-routing-in-meteor-navigation-state-w/#.Uz8BIS9dVX4
 
@@ -236,10 +241,9 @@ accept request in the form: `http://yoursite.com/search/:keywords`
 - MeteorPedia Full-text Search: http://www.meteorpedia.com/read/Fulltext_search
 - Using Elastic Search with MongoDB: https://github.com/matteodem/meteor-easy-search
 - Meteor (MongoDB) Full-text search: http://stackoverflow.com/questions/14567856/full-text-search-with-meteor-js-and-mongodb (non-answer!)
-- Lunr JS "Simple" full-text search in your browser: http://lunrjs.com/ 
+- Lunr JS "Simple" full-text search in your browser: http://lunrjs.com/
 (but our data is in MongoDB so not much use...)
 
 #### Deploying to Heroku?
 
 - Heroku ENVironment variables (in Node.js Apps): https://devcenter.heroku.com/articles/nodejs-support
-
