@@ -1,9 +1,12 @@
 # Meteor Search
 
-## Note
+## Notes
 
-This is **"Spike" Code**. It ***works*** but has **Zero Unit Tests**
+1. This is **"Spike" Code**. It ***works*** but has **Zero Unit Tests**
 so is for ***Learning Purposes Only***!
+2. Was written for the *previous version* of Meteor and requires
+some tweaking for **Meteor 1.0** (which we are not using)...
+
 
 ## WHY
 
